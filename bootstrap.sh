@@ -15,7 +15,7 @@ if [[ $KERNEL >= 3.8 && $MACHINE == "armv7"* ]]; then
         # install Linux Extended Container
         apt-get install lxc
         # install AU-AFS
-        apt-get install aufs-tools
+        apt-get install cgroup-bin aufs-tools
         apt-get install docker.io
         # mount cgroups
         curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount | /bin/bash
