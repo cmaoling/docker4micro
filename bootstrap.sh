@@ -6,6 +6,7 @@
 #    http://mirror.igorpecovnik.com/Micro_Debian_1.8_wheezy_4.0.4.zip
 MACHINE=$(uname -m)
 KERNEL=$(uname -r)
+echo "Kernel=$KERNEL Machine=$MACHINE"
 if [[ $KERNEL >= 3.8 && $MACHINE == "armv7"* ]]; then
         echo "Found valid kernel and machine"
         # Add repro for docker  
