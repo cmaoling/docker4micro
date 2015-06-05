@@ -5,7 +5,7 @@
 # assumes OLIMEX micro booted based on 
 #    http://mirror.igorpecovnik.com/Micro_Debian_1.8_wheezy_4.0.4.zip
 MACHINE=$(uname -m)
-KERNEL=$(uname -r)
+KERNEL=$(uname -r | cut -d. -f1-2)
 echo "Kernel=$KERNEL Machine=$MACHINE"
 if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
     if [[ $MACHINE == "armv7"* ]]; then
