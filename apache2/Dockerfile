@@ -8,12 +8,12 @@ FROM armhfbuild/debian:wheezy
 MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 ################## BEGIN INSTALLATION ######################
 # Install APACHE2 on micro best of my knowledge
-RUN ["/bin/bash","-c","apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"]
+RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"
 #Sqlite packages installation:
-RUN ["/bin/bash","-c","apt-get install -y sqlite3"]
+RUN apt-get install -y sqlite3
 
 #Apache2 webserver packages installation:
-RUN ["/bin/bash","-c","apt-get install -y apache2 libapache2-mod-php5 nano"]
+RUN apt-get install -y apache2 libapache2-mod-php5 nano
 
 #Php5 packages installation:
 RUN ["/bin/bash","-c","apt-get install -y php5-gd php5-json php5-sqlite php5-curl php5-intl php5-mcrypt php5-imagick php-net-ftp php5-gmp php-apc php5-apcu php5-imagick"]
