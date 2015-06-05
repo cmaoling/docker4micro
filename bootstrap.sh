@@ -23,7 +23,8 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
         apt-get install -y cgroup-bin aufs-tools
         apt-get install -y docker.io
         # mount cgroups
-        curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount | /bin/bash
+        echo "curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount | /bin/bash" >> /etc/default/docker
+        . /etc/default/docker
         mount
         sysctl -w net.ipv4.ip_forward=1
         # check install
