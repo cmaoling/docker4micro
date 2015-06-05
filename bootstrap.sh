@@ -9,7 +9,7 @@ KERNEL=$(uname -r | cut -d. -f1-2)
 echo "Kernel=$KERNEL Machine=$MACHINE"
 if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
     if [[ $MACHINE == "armv7"* ]]; then
-        echo "\\033[1;32mFound valid kernel and architecture"
+        echo "Found valid kernel and architecture"
         # Add repro for docker  
         touch /etc/apt/sources.list.d/docker.list
         rm /etc/apt/sources.list.d/docker.list
