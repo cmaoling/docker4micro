@@ -11,6 +11,8 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
     if [[ $MACHINE == "armv7"* ]]; then
         echo "Found valid kernel and architecture"
         # Add repro for docker  
+        touch /etc/apt/sources.list.d/docker.list
+        rm /etc/apt/sources.list.d/docker.list
         echo 'deb http://ftp.de.debian.org/debian sid main' >> /etc/apt/sources.list.d/docker.list
         # Reload all
         apt-get update
