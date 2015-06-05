@@ -9,7 +9,7 @@ KERNEL=$(uname -r | cut -d. -f1-2)
 echo "Kernel=$KERNEL Machine=$MACHINE"
 if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
     if [[ $MACHINE == "armv7"* ]]; then
-        echo "Found valid kernel and architecture"
+        echo "\\033[1;32mFound valid kernel and architecture"
         # Add repro for docker  
         touch /etc/apt/sources.list.d/docker.list
         rm /etc/apt/sources.list.d/docker.list
@@ -30,7 +30,7 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
         lxc-checkconfig
         curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh | /bin/bash /dev/stdin
         #docker -D -d &
-        docker run -it armhfbuild/debian:latest | wget www.github.com
+        docker run -it armhfbuild/debian:latest curl -L  https://raw.githubusercontent.com/cmaoling/docker4micro/master/success | /bin/bash
      else 
         echo "Valid kernel $KERNEL on invalid architecture $MACHINE"
      fi
