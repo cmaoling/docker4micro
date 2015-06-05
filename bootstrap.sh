@@ -7,8 +7,9 @@
 MACHINE=$(uname -m)
 KERNEL=$(uname -r)
 echo "Kernel=$KERNEL Machine=$MACHINE"
-if [[ $KERNEL >= 3.8 && $MACHINE == "armv7"* ]]; then
-        echo "Found valid kernel and machine"
+if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
+    if [[ $MACHINE == "armv7"* ]]; then
+        echo "Found valid kernel and architecture"
         # Add repro for docker  
         echo 'deb  deb http://ftp.de.debian.org/debian sid main' | tee /etc/apt/sources.list.d/docker.list
         # Reload all
@@ -27,8 +28,13 @@ if [[ $KERNEL >= 3.8 && $MACHINE == "armv7"* ]]; then
         curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh | /bin/bash /dev/stdin
         #docker -D -d &
         docker run -it armhfbuild/debian:latest | wget www.github.com
+     else 
+        echo "Valid kernel $KERNEL on invalid architecture $MACHINE"
+     fi
+elif [[ $MACHINE == "armv7"* ]]; then
+        echo "Invalid kernel $KERNEL on valid architecture $MACHINE"
 else
-        echo "Invalid kernel $KERNEL and/or architecture $MACHINE"
+        echo "Invalid kernel $KERNEL and architecture $MACHINE"
 fi
 
 
