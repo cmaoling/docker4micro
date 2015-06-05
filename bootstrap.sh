@@ -7,11 +7,27 @@
 MACHINE=$(uname -m)
 KERNEL=$(uname -r)
 if [[ $KERNEL >= 3.8 && $MACHINE == "armv7"* ]]; then
-        # There is no NAND support in mainline yet
         echo "Found valid kernel and machine"
-        curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount
+        # Add repro for docker  
+        echo 'deb  deb http://ftp.de.debian.org/debian sid main' | tee /etc/apt/sources.list.d/docker.list
+        # Reload all
+        apt-get update
+        # install Linux Extended Container
+        apt-get install lxc
+        # install AU-AFS
+        apt-get install aufs-tools
+        apt-get install docker.io
+        # mount cgroups
+        curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount | /bin/bash
+        mount
+        sysctl -w net.ipv4.ip_forward=1
+        # check install
+        lxc-checkconfig
+        curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh | /bin/bash /dev/stdin
+        #docker -D -d &
+        docker run -it armhfbuild/debian:latest | wget www.github.com
 else
-        echo "Invalid kernel $KERNEL or architecture $MACHINE"
+        echo "Invalid kernel $KERNEL and/or architecture $MACHINE"
 fi
 
 
