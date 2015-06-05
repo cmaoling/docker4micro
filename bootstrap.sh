@@ -30,7 +30,9 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
         lxc-checkconfig
         curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh | /bin/bash /dev/stdin
         #docker -D -d &
-        docker run -it armhfbuild/debian:latest curl -L  https://raw.githubusercontent.com/cmaoling/docker4micro/master/success | /bin/bash
+        docker run -it armhfbuild/debian:latest uname -a
+        docker ps -a
+        docker images
      else 
         echo "Valid kernel $KERNEL on invalid architecture $MACHINE"
      fi
