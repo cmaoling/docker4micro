@@ -16,6 +16,7 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
         echo 'deb http://ftp.de.debian.org/debian sid main' >> /etc/apt/sources.list.d/docker.list
         # Reload all
         apt-get update
+        apt-get autoremove
         # install Linux Extended Container
         apt-get install -y lxc
         # install AU-AFS
