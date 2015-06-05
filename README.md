@@ -7,4 +7,4 @@ clean SD card using gparted by creating a fresh ext4 partition, then
 sudo dd bs=1M if=Micro_Debian_1.8_wheezy_4.0.4.raw of=/dev/sdx
 
 usage of bootstrab
- curl -L https://raw.githubusercontent.com/cmaoling/docker4micro/master/bootstrap.sh | /bin/bash
+ curl -L --ssh https://raw.githubusercontent.com/cmaoling/docker4micro/master/bootstrap.sh | /bin/bash
