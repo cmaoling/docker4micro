@@ -6,7 +6,7 @@
 #    http://mirror.igorpecovnik.com/Micro_Debian_1.8_wheezy_4.0.4.zip
 MACHINE=$(uname -m)
 KERNEL=$(uname -r)
-if [[ $KERNEL > 4.0 && $MACHINE == "armv7"* ]]; then
+if [[ $KERNEL >= 3.8 && $MACHINE == "armv7"* ]]; then
         # There is no NAND support in mainline yet
         echo "Found valid kernel and machine"
         curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount
