@@ -17,10 +17,10 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
         # Reload all
         apt-get update
         # install Linux Extended Container
-        apt-get install lxc
+        apt-get install -y lxc
         # install AU-AFS
-        apt-get install cgroup-bin aufs-tools
-        apt-get install docker.io
+        apt-get install -y cgroup-bin aufs-tools
+        apt-get install -y docker.io
         # mount cgroups
         curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount | /bin/bash
         mount
