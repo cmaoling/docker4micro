@@ -18,6 +18,21 @@ RUN apt-get install -y curl
 #Apache2 webserver packages installation:
 RUN apt-get install -y apache2 libapache2-mod-php5 nano
 
+#based on https://github.com/jacksoncage/apache-docker/blob/master/Dockerfile
+ADD ./001-docker.conf /etc/apache2/sites-available/
+RUN ln -s /etc/apache2/sites-available/001-docker.conf /etc/apache2/sites-enabled/
+# Set Apache environment variables (can be changed on docker run with -e)
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+ENV APACHE_PID_FILE /var/run/apache2.pid
+ENV APACHE_RUN_DIR /var/run/apache2
+ENV APACHE_LOCK_DIR /var/lock/apache2
+ENV APACHE_SERVERADMIN admin@localhost
+ENV APACHE_SERVERNAME localhost
+ENV APACHE_SERVERALIAS docker.localhost
+ENV APACHE_DOCUMENTROOT /var/www
+
 #Php5 packages installation:
 #RUN apt-get install -y php5-gd php5-json php5-sqlite php5-curl php5-intl php5-mcrypt php5-imagick php-net-ftp php5-gmp php-apc php5-apcu php5-imagick
 #create key
@@ -31,8 +46,9 @@ RUN /usr/sbin/service apache2 force-reload
 RUN /usr/sbin/service apache2 restart
 RUN /usr/sbin/update-rc.d apache2 enable
 
-
-EXPOSE 80
 EXPOSE 443
+ADD start.sh /start.sh
+RUN chmod 0755 /start.sh
+CMD ["bash", "start.sh"]
 
 ##################### INSTALLATION END #####################
