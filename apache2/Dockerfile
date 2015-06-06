@@ -20,11 +20,13 @@ RUN apt-get install -y apache2 libapache2-mod-php5 nano
 
 #Php5 packages installation:
 #RUN apt-get install -y php5-gd php5-json php5-sqlite php5-curl php5-intl php5-mcrypt php5-imagick php-net-ftp php5-gmp php-apc php5-apcu php5-imagick
+#create key
 RUN /usr/bin/openssl genrsa -out /etc/ssl/private/apache.key 2048
+#http://www.flatmtn.com/article/setting-openssl-create-certificates
 RUN /usr/bin/openssl req -new -x509 -key /etc/ssl/private/apache.key -days 365 -sha256 -out /etc/ssl/certs/apache.crt
 RUN /usr/sbin/a2enmod ssl
 RUN /usr/sbin/a2enmod rewrite
-RUN /usr/sbin/a2ensite default-ssl.conf
+#RUN /usr/sbin/a2ensite default-ssl.conf
 RUN /usr/sbin/service apache2 force-reload 
 RUN /usr/sbin/service apache2 restart
 RUN /usr/sbin/update-rc.d apache2 enable
