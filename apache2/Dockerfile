@@ -33,6 +33,8 @@ ENV APACHE_SERVERNAME localhost
 ENV APACHE_SERVERALIAS docker.localhost
 ENV APACHE_DOCUMENTROOT /var/www
 
+# based on http://aslamnajeebdeen.com/blog/how-to-fix-apache-could-not-reliably-determine-the-servers-fully-qualified-domain-name-using-127011-for-servername-error-on-ubuntu
+RUN echo "ServerName localhost" >> /etc/apache2/httpd.conf
 #Php5 packages installation:
 #RUN apt-get install -y php5-gd php5-json php5-sqlite php5-curl php5-intl php5-mcrypt php5-imagick php-net-ftp php5-gmp php-apc php5-apcu php5-imagick
 #create key
