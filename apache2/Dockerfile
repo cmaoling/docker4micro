@@ -12,7 +12,7 @@ RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-g
 #Sqlite packages installation:
 RUN apt-get install -y sqlite3
 
-#Sqlite packages installation:
+#CURL packages installation:
 RUN apt-get install -y curl
 
 #Apache2 webserver packages installation:
