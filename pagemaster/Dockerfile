@@ -10,7 +10,6 @@ MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 # Create pagemaster container on micro best of my knowledge
 RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"
 
-RUN apt-get install -y curl
 RUN addgroup pagemaster
 
 VOLUME /pagemaster
