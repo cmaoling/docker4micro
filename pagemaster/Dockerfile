@@ -14,7 +14,7 @@ RUN apt-get install inotify-tools
 RUN addgroup pagemaster
 
 VOLUME /pagemaster
-VOLUME /activefolder
+VOLUME /usr/lib/activefolder
 RUN chmod g+rws /pagemaster
 RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
 ADD activefolder/init.d/ /etc/init.d/
