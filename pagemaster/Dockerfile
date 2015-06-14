@@ -18,3 +18,5 @@ VOLUME /activefolder
 RUN chmod g+rws /pagemaster
 RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
 ADD activefolder/init.d/ /etc/init.d/
+ADD activefolder /usr/lib/activefolder
+RUN ["activefolder","start"]
