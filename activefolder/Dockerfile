@@ -11,12 +11,7 @@ MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"
 RUN apt-get install -y inotify-tools
 
-RUN addgroup pagemaster
-
-VOLUME /pagemaster
 VOLUME /usr/lib/activefolder
-RUN chmod g+rws /pagemaster
-RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
 ADD activefolder/init.d/ /etc/init.d/
 ADD activefolder /usr/lib/activefolder
-RUN ["activefolder","start"]
+RUN ["/etc/init.d/activefolder","start"]
