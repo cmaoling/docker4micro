@@ -17,6 +17,8 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
         # Reload all
         apt-get update
         apt-get autoremove
+        # FIX: Setting locale failed.
+        apt-get install -y locales
         # install Linux Extended Container
         apt-get install -y lxc
         # install AU-AFS
