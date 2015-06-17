@@ -15,7 +15,7 @@ VOLUME /srv/samba/share/pagemaster
 RUN chmod g+rws /srv/samba/share/pagemaster
 ADD	pagemaster /srv/samba/share/pagemaster/.activefolder
 RUN touch /srv/samba/share/pagemaster/active
-RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
+RUN echo "pagemaster:/srv/samba/share/pagemaster" >> /etc/activefolder
 
 RUN apt-get install -y samba-common samba gettext
 RUN ls -la /etc/samba/smb.conf 
