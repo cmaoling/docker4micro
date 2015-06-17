@@ -13,7 +13,7 @@ RUN apt-get install -y samba-common samba gettext
 RUN ls -la /etc/samba/smb.conf 
 RUN echo "" >> /etc/samba/smb.conf 
 
-RUN ls -la /srv
+RUN find /srv
 ADD		share.tmpl /share.tmpl
 ADD		setup.sh /setup.sh
 
