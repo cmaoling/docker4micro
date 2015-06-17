@@ -19,7 +19,7 @@ ADD		setup.sh /setup.sh
 
 RUN addgroup pagemaster
 VOLUME /srv/samba/share/pagemaster
-RUN chmod g+rws /pagemaster
+RUN chmod g+rws /srv/samba/share/pagemaster
 RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
 
 ENTRYPOINT      ["/setup.sh"]
