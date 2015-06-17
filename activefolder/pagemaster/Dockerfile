@@ -12,9 +12,15 @@ RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-g
 RUN apt-get install -y samba-common samba gettext
 RUN ls -la /etc/samba/smb.conf 
 RUN echo "" >> /etc/samba/smb.conf 
-RUN ls -la /srv/samba/share
+
+RUN ls -la /srv
+ADD		share.tmpl /share.tmpl
+ADD		setup.sh /setup.sh
 
 RUN addgroup pagemaster
 VOLUME /srv/samba/share/pagemaster
 RUN chmod g+rws /pagemaster
 RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
+
+ENTRYPOINT      ["/setup.sh"]
+
