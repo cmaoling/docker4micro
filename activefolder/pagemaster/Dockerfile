@@ -9,6 +9,14 @@ MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 ################## BEGIN INSTALLATION ######################
 # Create pagemaster container on micro best of my knowledge
 RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"
+
+RUN addgroup pagemaster
+VOLUME /srv/samba/share/pagemaster
+RUN chmod g+rws /srv/samba/share/pagemaster
+ADD	pagemaster /srv/samba/share/pagemaster/.activefolder
+RUN touch /srv/samba/share/pagemaster
+RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
+
 RUN apt-get install -y samba-common samba gettext
 RUN ls -la /etc/samba/smb.conf 
 RUN echo "" >> /etc/samba/smb.conf 
@@ -17,13 +25,6 @@ RUN find /srv
 ADD		share.tmpl /share.tmpl
 ADD		setup.sh /setup.sh
 RUN chmod 755  /setup.sh
-
-RUN addgroup pagemaster
-VOLUME /srv/samba/share/pagemaster
-RUN chmod g+rws /srv/samba/share/pagemaster
-ADD	pagemaster /srv/samba/share/pagemaster/.activefolder
-RUN touch /srv/samba/share/pagemaster
-RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
 
 RUN /etc/init.d/samba start
 RUN echo "watching /var/log/samba/*"
