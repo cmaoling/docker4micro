@@ -22,13 +22,11 @@ RUN ls -la /etc/samba/smb.conf
 RUN echo "" >> /etc/samba/smb.conf 
 
 RUN find /srv
-ADD		share.tmpl /share.tmpl
-ADD		setup.sh /setup.sh
+ADD	share.tmpl /share.tmpl
+ADD	setup.sh /setup.sh
 RUN chmod 755  /setup.sh
 
 RUN /etc/init.d/samba start
-RUN echo "watching /var/log/samba/*"
-RUN	tail -f /var/log/samba/*
 # Ports: https://wiki.samba.org/index.php/Samba_port_usage
 #NetBIOS Name Service 	137 	udp
 #NetBIOS Datagram 	138 	udp
