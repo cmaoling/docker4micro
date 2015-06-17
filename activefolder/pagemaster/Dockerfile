@@ -16,11 +16,10 @@ RUN echo "" >> /etc/samba/smb.conf
 RUN find /srv
 ADD		share.tmpl /share.tmpl
 ADD		setup.sh /setup.sh
+RUN chmod 755  /setup.sh
 
 RUN addgroup pagemaster
 VOLUME /srv/samba/share/pagemaster
 RUN chmod g+rws /srv/samba/share/pagemaster
 RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
-RUN chmod 755  /setup.sh
-ENTRYPOINT      ["/setup.sh"]
 
