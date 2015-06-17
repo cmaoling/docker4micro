@@ -15,5 +15,5 @@ VOLUME /usr/lib/activefolder
 ADD activefolder/init.d/ /etc/init.d/
 ADD activefolder /usr/lib/activefolder
 RUN touch /etc/activefolder
-RUN mkdir /src/activefolder
+RUN mkdir /srv/activefolder
 RUN ["/etc/init.d/activefolder","start"]
