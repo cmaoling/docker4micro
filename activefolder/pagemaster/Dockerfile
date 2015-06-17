@@ -26,8 +26,6 @@ ADD	share.tmpl /share.tmpl
 ADD	setup.sh /setup.sh
 RUN chmod 755  /setup.sh
 
-RUN /etc/init.d/samba start
-RUN /etc/init.d/activefolder start
 # Ports: https://wiki.samba.org/index.php/Samba_port_usage
 #NetBIOS Name Service 	137 	udp
 #NetBIOS Datagram 	138 	udp
@@ -38,3 +36,7 @@ EXPOSE 137
 EXPOSE 138
 EXPOSE 139
 EXPOSE 445
+
+ADD start.sh /start.sh
+RUN chmod 0755 /start.sh
+ENTRYPOINT exec /start.sh
