@@ -21,7 +21,10 @@ RUN chmod 755  /setup.sh
 RUN addgroup pagemaster
 VOLUME /srv/samba/share/pagemaster
 RUN chmod g+rws /srv/samba/share/pagemaster
+ADD	pagemaster /srv/samba/share/pagemaster/.activefolder
+RUN touch /srv/samba/share/pagemaster
 RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
+
 RUN /etc/init.d/samba start
 RUN echo "watching /var/log/samba/*"
 RUN	tail -f /var/log/samba/*
