@@ -29,6 +29,12 @@ RUN chmod 755  /setup.sh
 RUN /etc/init.d/samba start
 RUN echo "watching /var/log/samba/*"
 RUN	tail -f /var/log/samba/*
+# Ports: https://wiki.samba.org/index.php/Samba_port_usage
+#NetBIOS Name Service 	137 	udp
+#NetBIOS Datagram 	138 	udp
+#NetBIOS Session 	139 	tcp
+#(LDAP 	389 	tcp/udp)
+#SMB over TCP 	445 	tcp 
 EXPOSE 137
 EXPOSE 138
 EXPOSE 139
