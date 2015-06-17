@@ -22,4 +22,10 @@ RUN addgroup pagemaster
 VOLUME /srv/samba/share/pagemaster
 RUN chmod g+rws /srv/samba/share/pagemaster
 RUN echo "pagemaster:/pagemaster" >> /etc/activefolder
-
+RUN /etc/init.d/samba start
+RUN echo "watching /var/log/samba/*"
+RUN	tail -f /var/log/samba/*
+EXPOSE 137
+EXPOSE 138
+EXPOSE 139
+EXPOSE 445
