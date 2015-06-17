@@ -8,6 +8,7 @@ FROM colinas/activefolder
 MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 ################## BEGIN INSTALLATION ######################
 # Create pagemaster container on micro best of my knowledge
+ENV DEBIAN_FRONTEND "noninteractive"
 RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"
 
 RUN addgroup pagemaster
