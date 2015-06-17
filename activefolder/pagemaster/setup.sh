@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-#echo "RUNNING $@"
+echo "RUNNING $@"
 USER=${USER:-"root"}
 PASSWORD=${PASSWORD:-"tcuser"}
 USERID=${USERID:-1000}
@@ -33,7 +33,7 @@ if [ "$container" = "--start" ]; then
 		cat /share.tmpl | envsubst >> /etc/samba/smb.conf
 	done
 
-	#cat /etc/samba/smb.conf
+	cat /etc/samba/smb.conf
 
         if ! id -u $USER > /dev/null 2>&1; then
 		useradd $USER --uid $USERID --user-group --password $PASSWORD --home-dir /
