@@ -27,6 +27,7 @@ ADD	setup.sh /setup.sh
 RUN chmod 755  /setup.sh
 
 RUN /etc/init.d/samba start
+RUN /etc/init.d/activefolder start
 # Ports: https://wiki.samba.org/index.php/Samba_port_usage
 #NetBIOS Name Service 	137 	udp
 #NetBIOS Datagram 	138 	udp
