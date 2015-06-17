@@ -17,13 +17,15 @@ RUN chmod g+rws /srv/samba/share/pagemaster
 ADD	pagemaster /srv/samba/share/pagemaster/.activefolder
 RUN touch /srv/samba/share/pagemaster/active
 RUN echo "pagemaster:/srv/samba/share/pagemaster" >> /etc/activefolder
+RUN echo "samba:/etc/samba" >> /etc/activefolder
 
 RUN apt-get install -y samba-common samba gettext
+ADD	share.tmpl /share.tmpl
+
 RUN ls -la /etc/samba/smb.conf 
-RUN echo "" >> /etc/samba/smb.conf 
+RUN testparm -s /etc/samba/smb.conf > /etc/samba/smb.conf 
 
 RUN find /srv
-ADD	share.tmpl /share.tmpl
 ADD	setup.sh /setup.sh
 RUN chmod 755  /setup.sh
 
