@@ -9,11 +9,10 @@ MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 ################## BEGIN INSTALLATION ######################
 # Install APACHE2 on micro best of my knowledge
 RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"
-#Sqlite packages installation:
-RUN apt-get install -y x11vnc xvfb firefox
-RUN mkdir ~/.vnc
-# Setup a password
-RUN  x11vnc -storepasswd 1234 ~/.vnc/passwd
-# Autostart firefox (might not be the best way to do it, but it does the trick)
-RUN  bash -c 'echo "firefox" >> /.bashrc'
-##################### INSTALLATION END #####################
+#http://security.stackexchange.com/questions/61710/how-to-sandbox-iceweasel-firefox-on-debian
+RUN apt-get -y install openssh-server firefox
+#RUN apt-get install -y x11vnc xvfb firefox
+ADD /etc/shadow /shadow
+ENV USER ""
+RUN useradd $USER -p`grep -e"$USER" /etc/shadow | cut -d":" -f2`
+#################### INSTALLATION END #####################
