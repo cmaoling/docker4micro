@@ -12,7 +12,7 @@ RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-g
 #http://security.stackexchange.com/questions/61710/how-to-sandbox-iceweasel-firefox-on-debian
 RUN apt-get -y install openssh-server firefox xvfb
 #RUN apt-get install -y x11vnc xvfb firefox
-ADD /etc/shadow /shadow
-ENV USER ""
-RUN useradd $USER -p`grep -e"$USER" /etc/shadow | cut -d":" -f2`
+#ADD /etc/shadow /shadow
+#ENV USER ""
+#RUN useradd $USER -p`grep -e"$USER" /etc/shadow | cut -d":" -f2`
 #################### INSTALLATION END #####################
