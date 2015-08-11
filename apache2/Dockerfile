@@ -48,6 +48,8 @@ ADD host.key /etc/ssl/private/apache.key
 ADD host.crt /etc/ssl/certs/apache.crt
 RUN /usr/sbin/a2enmod ssl
 RUN /usr/sbin/a2enmod rewrite
+RUN /usr/sbin/a2dissite default
+RUN /usr/sbin/a2dissite default-ssl
 #RUN /usr/sbin/a2ensite default-ssl.conf
 RUN /usr/sbin/service apache2 force-reload 
 RUN /usr/sbin/service apache2 restart
