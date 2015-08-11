@@ -54,7 +54,7 @@ RUN /usr/sbin/a2dissite default-ssl
 RUN /usr/sbin/service apache2 force-reload 
 RUN /usr/sbin/service apache2 restart
 RUN /usr/sbin/update-rc.d apache2 enable
-
+VOLUME /var/www
 EXPOSE 443
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
