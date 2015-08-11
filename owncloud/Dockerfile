@@ -10,5 +10,5 @@ MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 # Install owncloud on micro best of my knowledge
 ADD deb.list /etc/apt/sources.list.d/owncloud.list 
 RUN /bin/bash -c "apt-get update && apt-get upgrade -y && apt-get clean && apt-get autoremove"
-RUN /bin/bash -c "wget http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_7.0/Release.key | apt-key add"
+RUN /bin/bash -c "curl http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_7.0/Release.key | apt-key add"
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y owncloud
