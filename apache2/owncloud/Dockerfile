@@ -18,6 +18,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y php5-ldap
 VOLUME /var/owncloud
 ENV OWNCLOUD_DOCUMENTROOT=/var/www/owncloud
 ENV OWNCLOUD_VOLUMEROOT=/var/owncloud
+ADD ./001-docker.conf /etc/apache2/sites-available/
+RUN ln -sf /etc/apache2/sites-available/001-docker.conf /etc/apache2/sites-enabled/
 RUN /etc/init.d/apache2 restart
 ADD bootstrap.sh /owncloud.sh
 RUN chmod 0755 /owncloud.sh
