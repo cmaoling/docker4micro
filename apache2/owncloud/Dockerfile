@@ -15,4 +15,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y curl
 RUN /bin/bash -c "curl http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_7.0/Release.key | apt-key add - "
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes owncloud
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y php5-ldap
+VOLUME /var/owncloud
+ENV OWNCLOUD_DOCUMENTROOT=/var/www/owncloud
+ENV OWNCLOUD_VOLUMEROOT=/var/owncloud
 RUN /etc/init.d/apache2 restart
+ADD bootstrap.sh /owncloud.sh
+RUN chmod 0755 /owncloud.sh
+CMD ["bash", "owncloud.sh"]
+
