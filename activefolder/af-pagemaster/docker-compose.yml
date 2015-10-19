@@ -1,0 +1,21 @@
+sambamain:
+   image: "colinas/samba:latest"
+   ports:
+      - 137
+      - 138
+      - 139
+      - 445
+   volumes:
+      - /etc:/etc/_shadow
+      - /tmp:/srv/samba/share
+   environment:
+      - BROWSABLE="yes"
+      - MASKMOD=123
+
+active:
+   image: "colinas/pagemaster:latest"
+   volumes:
+      - /home/nicolas/pagemaster:/activefolder
+
+
+   

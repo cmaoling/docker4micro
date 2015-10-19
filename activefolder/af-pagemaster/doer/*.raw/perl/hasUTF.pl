@@ -1,0 +1,1 @@
+../../../tools/hasUTF.pl

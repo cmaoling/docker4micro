@@ -1,0 +1,190 @@
+#!/bin/bash
+#-*- coding: utf-8 -*-
+# code2pl-merger of common and tidyHTML
+USER=`whoami`
+DATE=`date`
+DEBUG=1
+echo "# arguments called with ---->  ${@}     "
+echo "# path to me --------------->  ${0}     "
+echo "# \$1 ----------------------->  $1       "
+echo "# \$2 ----------------------->  $2       "
+echo "# PID ---------------------->  $$       "
+echo "# source------------------->  $ACTIVEFILE"
+
+BASENAME=${1##*/}
+BASENAME=${BASENAME%.raw} # TIDYHTML (exclusive)
+ROOTNAME=${BASENAME%_20*} # TIDYHTML (exclusive)
+TABLENAME=${BASENAME##*.}
+TEST=${BASENAME%.raw} # TIDYHTML (personlized) [.raw]
+  
+
+
+ACTIVEFOLDER=${ACTIVEFOLDER:-};
+
+SCRIPTFILE=${SCRIPTFILE:-$0};
+SCRIPTPATH=${SCRIPTFILE%/*}
+SCRIPTNAME=${SCRIPTFILE##*/}
+
+ACTIVEFILE=${ACTIVEFILE:-$1};
+if [ "$ACTIVEFOLDER" == "" ]; then
+  ACTIVEFOLDER="${ACTIVEFILE%/*}"
+fi
+ACTIVEFILENAME=$(basename "$ACTIVEFILE")
+ACTIVEFILEEXTENTION="${ACTIVEFILENAME##*.}"
+ACTIVEBASENAME="${ACTIVEFILENAME%.*}"
+
+
+echo "# root---------------------->  $ROOTNAME"
+echo "# base--------------------->  $BASENAME"
+echo "# table-------------------->  $TABLENAME"
+
+ACTIVEID=${ACTIVEID:-$2};
+ACTIVEUSER=${ACTIVEID%:*}
+ACTIVEGROUP=${ACTIVEID##*:}
+
+
+
+
+
+
+
+
+
+
+
+
+function _msg {
+    MSG=${1:-"No Message"}
+    TYPE=${2:-}
+    if [ ! -z "$TYPE" ]; then TYPE=" ($TYPE)"; fi
+    OPT=${3:-}
+    #echo "MSG: <$MSG>	 TYPE: <$TYPE> OPT: <$OPT>"
+    TIME=`date -R`
+    echo  $OPT " [$TIME] $HOSTNAME $SCRIPTNAME-$USER]:$TYPE $MSG"
+}
+
+function _Imsg {
+   OPT=" ${2:-}"
+  _msg "$1" "I"  "$OPT"
+}
+
+function _Dmsg {
+   OPT=" ${2:-}"
+  if [ $DEBUG -eq 1 ]; then
+    _msg "$1" "D"  "$OPT"
+  fi
+}
+
+function _Emsg {
+   OPT=" ${2:-}"
+  _msg "$1" "E"  "$OPT"
+}
+
+function _Wmsg {
+   OPT=" ${2:-}"
+  _msg "$1" "W"  "$OPT"
+}
+
+function _mkdir {
+  DIR=${1:-}
+  #_Dmsg "DIR: <$DIR>"
+  if [ -z "$DIR" ]; then 
+     _Emsg "_mkdir: fehlender Operand"
+  else
+  if [ -d "$DIR" ]; then 
+    echo " (I) Setup - Directory $DIR already exists. Will reuse it."
+  else
+    echo -ne " (I) Setup - Creating $DIR as $ACTIVEUSER for future usage: "
+    mkdir  -p $DIR
+    if [ "$?" == "0" ]; then echo "DONE."; fi
+  fi
+  fi
+}
+
+
+
+
+
+
+
+
+
+
+CALL="${BASH_SOURCE[0]}"
+DIR="$( dirname "$CALL" )"
+while [ -h "$CALL" ]
+do
+  CALL="$(readlink "$CALL")"
+  [[ $CALL != /* ]] && SOURCE="$DIR/$CALL"
+  DIR="$( cd -P "$( dirname "$CALL"  )" && pwd )"
+done
+_Dmsg "Script Name: $SCRIPTNAME"
+_Dmsg "Script Dir: $DIR"
+_Dmsg "Script Call: $CALL"
+
+
+
+
+PID=$$
+DATE=`date +%Y%j`
+TIME=`date +%H%M%S`
+LOGFOLDER=${LOGFOLDER:-.};
+LOGFOLDER="$LOGFOLDER/$SCRIPTNAME/$DATE"
+LOGFILE="$LOGFOLDER/$TIME.log"
+_mkdir $LOGFOLDER
+
+
+if [ -e $SCRIPTPATH/perl/$SCRIPTNAME.version ]; then
+  VERSION=`cat $SCRIPTPATH/perl/$SCRIPTNAME.version`
+fi
+
+echo "$SCRIPTNAME script located in $SCRIPTPATH version $VERSION executed by $USER on $DATE from directory $ACTIVEFOLDER  with $PID"
+echo "# source------------------->  $ACTIVEFILE"
+echo "# base--------------------->  $ACTIVEBASENAME"
+echo "# root--------------------->  $ROOTNAME"
+echo "# table-------------------->  $TABLENAME"
+echo "# ID---------------------->  $ACTIVEID"
+echo "# RWD---------------------->  $ACTIVEFOLDER"
+echo "# CWD---------------------->  $SCRIPTPATH"
+echo "# Log---------------------->  $LOGFILE"
+RESULTFILES="$ACTIVEFOLDER/$BASENAME.table" # TIDYHTML (personlized) [$ACTIVEFOLDER/$BASENAME.table]
+TMPFILE="/tmp/$$.table" # TIDYHTML (exclusive)
+CLEANUPSCRIPT="$SCRIPTPATH/perl/cleanup.pl" # TIDYHTML (exclusive)
+HASUTFSCRIPT="$SCRIPTPATH/perl/hasUTF.pl" # TIDYHTML (exclusive)
+PERLSCRIPT="$SCRIPTPATH/perl/$SCRIPTNAME$VERSION.pl"
+EXTRACTSCRIPT="$SCRIPTPATH/perl/extractTable.pl" # TIDYHTML (exclusive)
+ $HASUTFSCRIPT  $ACTIVEFILE # TIDYHTML (exclusive)
+retval=$? # TIDYHTML (exclusive)
+echo "# hasUTF--------- $ACTIVEFILE ----------> $retval" # TIDYHTML (exclusive)
+if [ "$retval" == "0" ]; then # TIDYHTML (exclusive)
+  $CLEANUPSCRIPT $ACTIVEFILE |  $PERLSCRIPT 2>>  $LOGFILE | $PERLSCRIPT 1> $TMPFILE 2>> $LOGFILE # TIDYHTML (exclusive)
+else # TIDYHTML (exclusive)
+  $CLEANUPSCRIPT $ACTIVEFILE |  piconv -f utf-8 -t windows-1252 | $CLEANUPSCRIPT  | $PERLSCRIPT 2>> $LOGFILE  | $PERLSCRIPT 1> $TMPFILE 2>> $LOGFILE  # TIDYHTML (exclusive)
+fi # TIDYHTML (exclusive)
+$EXTRACTSCRIPT <  $TMPFILE | sed 's/<cite>/<!--&/' | sed 's/<\/cite>/&-->/'  > $ACTIVEFOLDER/$BASENAME.table # TIDYHTML (exclusive)
+rm $TMPFILE # TIDYHTML (exclusive)
+
+
+
+
+mv $ACTIVEFILE $LOGFOLDER/$TIME-$ACTIVEFILENAME
+
+
+
+
+
+
+
+
+
+
+
+
+for RESULTFILE in $RESULTFILES ; do
+echo "(I) Modify Ownership $RESULTFILE"
+  chgrp $ACTIVEGROUP "$RESULTFILE"
+  chmod 664 "$RESULTFILE"
+ls -la $RESULTFILE
+done
+cd $ACTIVEFOLDER
+echo "(I) $SCRIPTNAME completed."

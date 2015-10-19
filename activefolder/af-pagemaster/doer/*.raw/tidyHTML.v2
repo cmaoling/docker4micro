@@ -1,0 +1,68 @@
+#!/bin/bash
+#-*- coding: utf-8 -*-
+echo "${BASH_SOURCE[0]} v0.1"
+echo -n "Source /usr/sbin/functions"
+if [ -r "/usr/sbin/functions" ]; then
+  . /usr/sbin/functions
+  echo_passed
+  echo 
+else 
+  echo " - failed."
+  exit -1
+fi
+DEBUG=1
+
+LOGFOLDER=${LOGFOLDER:-./};
+ACTIVEFOLDER=${ACTIVEFOLDER:-};
+
+SCRIPTFILE=${SCRIPTFILE:-$0};
+SCRIPTPATH=${SCRIPTFILE%/*}
+SCRIPTNAME=${SCRIPTFILE##*/}
+
+ACTIVEFILE=${ACTIVEFILE:-$1};
+if [ "$ACTIVEFOLDER" == "" ]; then
+  ACTIVEFOLDER="${ACTIVEFILE%/*}"
+fi
+ACTIVEFILENAME=$(basename "$ACTIVEFILE")
+ACTIVEFILEEXTENTION="${ACTIVEFILENAME##*.}"
+ACTIVEBASENAME="${ACTIVEFILENAME%.*}"
+
+ACTIVEID=${ACTIVEID:-$2};
+ACTIVEUSER=${ACTIVEID%:*}
+ACTIVEGROUP=${ACTIVEID##*:}
+
+ROOTNAME=${ACTIVEBASENAME%_20*}
+TABLENAME=${ACTIVEBASENAME##*.}
+
+CALL="${BASH_SOURCE[0]}"
+DIR="$( dirname "$CALL" )"
+while [ -h "$CALL" ]
+do
+  CALL="$(readlink "$CALL")"
+  _Dmsg "$CALL"
+  [[ $CALL != /* ]] && SOURCE="$DIR/$CALL"
+  DIR="$( cd -P "$( dirname "$CALL"  )" && pwd )"
+done
+_Dmsg "Script Name: $SCRIPTNAME"
+_Dmsg "Script Dir: $DIR"
+_Dmsg "Script Call: $CALL"
+RWD=`pwd`
+CWD="$DIR"
+AWD=${CWD%/*}
+AWD=${AWD%/*}
+PID=$$
+_mkdir $AWD/log/$PID
+touch $AWD/log/${PID}.touch
+if [ -e $CWD/perl/$SCRIPT.version ]; then
+  VERSION=`cat $CWD/perl/$SCRIPT.version`
+fi
+echo "$SCRIPT script located in $CWD version $VERSION executed by $USER on $DATE from directory $RWD  with $PID"
+echo "# source------------------->  $SOURCE"
+echo "# base--------------------->  $BASENAME"
+echo "# root--------------------->  $ROOTNAME"
+echo "# table-------------------->  $TABLENAME"
+echo "# AWD---------------------->  $AWD"
+$CWD/perl/$SCRIPT$VERSION.pl $SOURCE | $CWD/perl/$SCRIPT$VERSION.pl 1> /tmp/$$.table 2> $AWD/log/$PID/$SCRIPT.log 
+$CWD/perl/extractTable.pl <  /tmp/$$.table  > $RWD/$BASENAME.table
+rm /tmp/$$.table 
+cd $RWD

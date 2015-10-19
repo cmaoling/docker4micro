@@ -1,0 +1,190 @@
+#!/bin/bash
+#-*- coding: utf-8 -*-
+# code2pl-merger of common and w3c
+USER=`whoami`
+DATE=`date`
+DEBUG=1
+echo "# arguments called with ---->  ${@}     "
+echo "# path to me --------------->  ${0}     "
+echo "# \$1 ----------------------->  $1       "
+echo "# \$2 ----------------------->  $2       "
+echo "# PID ---------------------->  $$       "
+echo "# source------------------->  $ACTIVEFILE"
+
+BASENAME=${1##*/}
+BASENAME=${BASENAME%_preview.html} # W3C (exclusive)
+ROOTNAME=${BASENAME%_preview*} # W3C (exclusive)
+TABLENAME=${BASENAME##*.}
+TEST=${BASENAME%_preview.html} # W3C (personlized) [_preview.html]
+  
+
+
+ACTIVEFOLDER=${ACTIVEFOLDER:-};
+
+SCRIPTFILE=${SCRIPTFILE:-$0};
+SCRIPTPATH=${SCRIPTFILE%/*}
+SCRIPTNAME=${SCRIPTFILE##*/}
+
+ACTIVEFILE=${ACTIVEFILE:-$1};
+if [ "$ACTIVEFOLDER" == "" ]; then
+  ACTIVEFOLDER="${ACTIVEFILE%/*}"
+fi
+ACTIVEFILENAME=$(basename "$ACTIVEFILE")
+ACTIVEFILEEXTENTION="${ACTIVEFILENAME##*.}"
+ACTIVEBASENAME="${ACTIVEFILENAME%.*}"
+
+
+echo "# root---------------------->  $ROOTNAME"
+echo "# base--------------------->  $BASENAME"
+echo "# table-------------------->  $TABLENAME"
+
+ACTIVEID=${ACTIVEID:-$2};
+ACTIVEUSER=${ACTIVEID%:*}
+ACTIVEGROUP=${ACTIVEID##*:}
+
+
+
+
+
+
+
+
+
+
+
+
+function _msg {
+    MSG=${1:-"No Message"}
+    TYPE=${2:-}
+    if [ ! -z "$TYPE" ]; then TYPE=" ($TYPE)"; fi
+    OPT=${3:-}
+    #echo "MSG: <$MSG>	 TYPE: <$TYPE> OPT: <$OPT>"
+    TIME=`date -R`
+    echo  $OPT " [$TIME] $HOSTNAME $SCRIPTNAME-$USER]:$TYPE $MSG"
+}
+
+function _Imsg {
+   OPT=" ${2:-}"
+  _msg "$1" "I"  "$OPT"
+}
+
+function _Dmsg {
+   OPT=" ${2:-}"
+  if [ $DEBUG -eq 1 ]; then
+    _msg "$1" "D"  "$OPT"
+  fi
+}
+
+function _Emsg {
+   OPT=" ${2:-}"
+  _msg "$1" "E"  "$OPT"
+}
+
+function _Wmsg {
+   OPT=" ${2:-}"
+  _msg "$1" "W"  "$OPT"
+}
+
+function _mkdir {
+  DIR=${1:-}
+  #_Dmsg "DIR: <$DIR>"
+  if [ -z "$DIR" ]; then 
+     _Emsg "_mkdir: fehlender Operand"
+  else
+  if [ -d "$DIR" ]; then 
+    echo " (I) Setup - Directory $DIR already exists. Will reuse it."
+  else
+    echo -ne " (I) Setup - Creating $DIR as $ACTIVEUSER for future usage: "
+    mkdir  -p $DIR
+    if [ "$?" == "0" ]; then echo "DONE."; fi
+  fi
+  fi
+}
+
+
+
+
+
+
+
+
+
+
+CALL="${BASH_SOURCE[0]}"
+DIR="$( dirname "$CALL" )"
+while [ -h "$CALL" ]
+do
+  CALL="$(readlink "$CALL")"
+  [[ $CALL != /* ]] && SOURCE="$DIR/$CALL"
+  DIR="$( cd -P "$( dirname "$CALL"  )" && pwd )"
+done
+_Dmsg "Script Name: $SCRIPTNAME"
+_Dmsg "Script Dir: $DIR"
+_Dmsg "Script Call: $CALL"
+
+
+
+
+PID=$$
+DATE=`date +%Y%j`
+TIME=`date +%H%M%S`
+LOGFOLDER=${LOGFOLDER:-.};
+LOGFOLDER="$LOGFOLDER/$SCRIPTNAME/$DATE"
+LOGFILE="$LOGFOLDER/$TIME.log"
+_mkdir $LOGFOLDER
+
+
+if [ -e $SCRIPTPATH/perl/$SCRIPTNAME.version ]; then
+  VERSION=`cat $SCRIPTPATH/perl/$SCRIPTNAME.version`
+fi
+
+echo "$SCRIPTNAME script located in $SCRIPTPATH version $VERSION executed by $USER on $DATE from directory $ACTIVEFOLDER  with $PID"
+echo "# source------------------->  $ACTIVEFILE"
+echo "# base--------------------->  $ACTIVEBASENAME"
+echo "# root--------------------->  $ROOTNAME"
+echo "# table-------------------->  $TABLENAME"
+echo "# ID---------------------->  $ACTIVEID"
+echo "# RWD---------------------->  $ACTIVEFOLDER"
+echo "# CWD---------------------->  $SCRIPTPATH"
+echo "# Log---------------------->  $LOGFILE"
+RESULTFILES="$ACTIVEFOLDER/${ROOTNAME}_$SCRIPTNAME.log $ACTIVEFOLDER/${ROOTNAME}_$SCRIPTNAME.html" # W3C (personlized) [$ACTIVEFOLDER/${ROOTNAME}_$SCRIPTNAME.log $ACTIVEFOLDER/${ROOTNAME}_$SCRIPTNAME.html]
+
+
+
+PERLSCRIPT="$SCRIPTPATH/perl/$SCRIPTNAME$VERSION.pl"
+
+$PERLSCRIPT $ACTIVEFILE 2> $ACTIVEFOLDER/${ROOTNAME}_$SCRIPTNAME.log > $ACTIVEFOLDER/${ROOTNAME}_$SCRIPTNAME.html # W3C (exclusive)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# mv $ACTIVEFILE $LOGFOLDER/$TIME-$ACTIVEFILENAME # W3C (masked)
+
+
+
+
+
+
+
+
+
+
+
+
+for RESULTFILE in $RESULTFILES ; do
+echo "(I) Modify Ownership $RESULTFILE"
+  chgrp $ACTIVEGROUP "$RESULTFILE"
+  chmod 664 "$RESULTFILE"
+ls -la $RESULTFILE
+done
+cd $ACTIVEFOLDER
+echo "(I) $SCRIPTNAME completed."

@@ -1,0 +1,59 @@
+#!/bin/bash
+echo "# arguments called with ---->  ${@}     "
+echo "# \$1 ---------------------->  $1       "
+echo "# \$2 ---------------------->  $2       "
+echo "# path to me --------------->  ${0}     "
+echo "# PID -.......-------------->  $$       "
+SOURCE="$1"
+BASENAME=${1##*/}
+BASEPATH=${1%/*}
+
+SCRIPT=${0##*/}
+USER=`whoami` 
+DATE=`date`
+
+ACTIVEID="$2"
+ACTIVEUSER=${ACTIVEID%:*}
+ACTIVEGROUP=${ACTIVEID##*:}
+
+function _mkdir {
+  DIR="$1"
+  if [ -d "$DIR" ]; then 
+    echo " (I) Setup - Directory $DIR already exists. Will reuse it."
+  else
+    echo -ne " (I) Setup - Creating $DIR as $ACTIVEUSER for future usage: "
+    mkdir "$DIR" 
+    if [ "$?" == "0" ]; then echo "DONE."; fi
+  fi
+}
+
+CALL="${BASH_SOURCE[0]}"
+DIR="$( dirname "$CALL" )"
+while [ -h "$CALL" ]
+do
+  CALL="$(readlink "$CALL")"
+  [[ $CALL != /* ]] && SOURCE="$DIR/$CALL"
+  DIR="$( cd -P "$( dirname "$CALL"  )" && pwd )"
+done
+RWD=`pwd`
+CWD="$DIR"
+AWD=${CWD%/*}
+AWD=${AWD%/*}
+PID=$$
+_mkdir $AWD/log/$PID
+if [ -e $CWD/perl/$SCRIPT.version ]; then
+  VERSION=`cat $CWD/perl/$SCRIPT.version`
+fi
+echo "$SCRIPT script located in $CWD version $VERSION executed by $USER on $DATE from directory $RWD  with $PID"
+echo "# source------------------->  $SOURCE"
+echo "# base--------------------->  $BASENAME"
+echo "# AWD---------------------->  $AWD"
+echo "# path-------------------->  $BASEPATH"
+
+REMOTEDIR=""
+if [ -r $BASEPATH/.remoteDir ]; then
+    REMOTEDIR=`cat $BASEPATH/.remoteDir`
+fi
+echo "REMOTEDIR = $REMOTEDIR"
+echo "put,$SOURCE,${REMOTEDIR}${BASENAME}" >> ${BASEPATH}/_upload.list
+echo "(I) $SCRIPT completed."
