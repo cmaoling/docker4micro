@@ -26,6 +26,8 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
         apt-get install -y docker.io
         # mount cgroups
         echo "curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount | /bin/bash" >> /etc/default/docker
+        #docker-compose based on :http://blog.hypriot.com/post/docker-compose-nodejs-haproxy/
+        sh -c "curl -L https://github.com/hypriot/compose/releases/download/1.1.0-raspbian/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; chmod +x /usr/local/bin/docker-compose"
         . /etc/default/docker
         mount
         sysctl -w net.ipv4.ip_forward=1
