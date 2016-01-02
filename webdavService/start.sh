@@ -6,6 +6,7 @@ if [ -e /webdav/secret ]; then
   cat ~/.davfs/secrets
   mkdir mnt_webdav
   mount -t davfs $WEBDAV /mnt_webdav 
+  top
 else
   echo "No secret provided."
 fi
