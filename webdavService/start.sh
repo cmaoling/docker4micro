@@ -1,12 +1,13 @@
 #!/bin/bash
-export WEBDAV=${WEBDAV:-"https://deadbeef.nil"}
-echo $WEBDAV
 ls -la /webdav
-if [ -e /webdav/secret ]; then 
-  echo "$WEBDAV "`cat /webdav/secret` >> /etc/davfs2/secrets
+if [ -e /webdav/secret ]; then
+  MNT=`cat /webdav/secret  | cut -d" " -f1`
+  SERVER=`cat /webdav/secret  | cut -d" " -f2`
+  cat /webdav/secret  | cut -d" " -f2- > /etc/davfs2/secrets
   cat /etc/davfs2/secrets
-  mkdir mnt_webdav
-  mount -t davfs $WEBDAV /mnt_webdav
+  mkdir /mnt_webdav
+  mkdir /mnt_webdav/$MNT
+  mount -t davfs $SERVER /mnt_webdav/$MNT
 else
   echo "No secret provided."
 fi
