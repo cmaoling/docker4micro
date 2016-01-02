@@ -4,7 +4,7 @@ echo $WEBDAV
 ls -la /webdav
 if [ -e /webdav/secret ]; then 
   echo "$WEBDAV "`cat /webdav/secret` >> /etc/davfs2/secrets
-  cat ~/.davfs/secrets
+  cat /etc/davfs2/secrets
   mkdir mnt_webdav
   mount -t davfs $WEBDAV /mnt_webdav
 else
