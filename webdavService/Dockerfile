@@ -18,7 +18,7 @@ FROM armhfbuild/debian:wheezy
 MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 ################## BEGIN INSTALLATION ####################### example call: docker run --privilege -t colinas/webdav
 RUN apt-get update
-RUN apt-get -y install apt-get  install davfs2
+RUN apt-get -y install davfs2
 ENV WEBDAV=https://deadbeef.nil
 VOLUME /webdav
 ADD start.sh /start.sh
