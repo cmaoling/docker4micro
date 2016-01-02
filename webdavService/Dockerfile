@@ -20,7 +20,7 @@ MAINTAINER Colinas Maoling "colinas.maoling@t-online.de"
 RUN apt-get update
 ENV DEBIAN_FRONTEND "noninteractive"
 RUN apt-get -y install davfs2
-ENV WEBDAV "https://default.nil"
+ENV WEBDAV ""
 VOLUME /webdav
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
