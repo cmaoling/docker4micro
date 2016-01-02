@@ -10,4 +10,4 @@ if [ -e /webdav/secret ]; then
 else
   echo "No secret provided."
 fi
-top
+tail -f bootstrap.log
