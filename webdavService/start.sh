@@ -1,3 +1,5 @@
+#!/bin/bash
+export WEBDAV=${WEBDAV:-"https://deadbeef.nil"}
 echo $WEBDAV
 if [ -e /webdav/secret ]; then 
   echo "$WEBDAV "`cat /webdav/secret` > ~/.davfs/secrets
