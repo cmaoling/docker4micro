@@ -8,3 +8,5 @@ echo "deb [arch=armhf] https://download.docker.com/linux/ubuntu jessie stable" >
 apt-get -y update
 apt-get -y install docker-ce
 docker --version
+mkdir /sys/fs/cgroup/systemd
+mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
