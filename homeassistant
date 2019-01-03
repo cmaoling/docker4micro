@@ -1,0 +1,1 @@
+docker run -d --name="home-assistant" -v ~/ha-config:/config -v /etc/localtime:/etc/localtime:ro -p8123:8123 --device=/dev/ttyACM0:/zwaveusbstick:rwm homeassistant/armhf-homeassistant
