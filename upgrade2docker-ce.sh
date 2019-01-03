@@ -3,10 +3,12 @@ echo "Upgrade from previous docker-io to docker-maintained docker-ce"
 apt-get -y remove docker docker-engine docker.io
 apt-get -y autoremove
 docker --version
-echo "deb [arch=armhf] https://download.docker.com/linux/ubuntu jessie stable" > /etc/apt/sources.list.d/docker.list
+#echo "deb [arch=armhf] https://download.docker.com/linux/ubuntu jessie stable" > /etc/apt/sources.list.d/docker.list
+#echo "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable" |     sudo tee /etc/apt/sources.list.d/docker.list
 # cat /etc/apt/sources.list.d/docker.list
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 apt-get -y update
 apt-get -y install docker-ce
 docker --version
-mkdir /sys/fs/cgroup/systemd
-mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
+#mkdir /sys/fs/cgroup/systemd
+#mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
