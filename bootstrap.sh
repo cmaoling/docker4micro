@@ -11,31 +11,19 @@ if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
     if [[ $MACHINE == "armv7"* ]]; then
         echo "Found valid kernel and architecture"
         # Add repro for docker  
-        touch /etc/apt/sources.list.d/docker.list
-        rm /etc/apt/sources.list.d/docker.list
-        echo 'deb http://ftp.de.debian.org/debian sid main' >> /etc/apt/sources.list.d/docker.list
+        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
         # Reload all
         apt-get update
         apt-get autoremove
         # FIX: Setting locale failed.
         apt-get install -y locales
-        # install Linux Extended Container
-        apt-get install -y lxc
         # install AU-AFS
-        apt-get install -y cgroup-bin aufs-tools
-        apt-get install -y docker.io
-        # mount cgroups
-        echo "curl -L  https://raw.githubusercontent.com/cmaoling/cgroupfs-mount/master/cgroupfs-mount | /bin/bash" >> /etc/default/docker
-        #docker-compose based on :http://blog.hypriot.com/post/docker-compose-nodejs-haproxy/
-        sh -c "curl -L https://github.com/hypriot/compose/releases/download/1.1.0-raspbian/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; chmod +x /usr/local/bin/docker-compose"
-        . /etc/default/docker
-        mount
+        apt-get install -y aufs-tools
+        apt-get -y install docker-ce
+        docker --version
         sysctl -w net.ipv4.ip_forward=1
         # check install
-        lxc-checkconfig
-        curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh | /bin/bash /dev/stdin
-        #docker -D -d &
-        docker run -it armhfbuild/debian:latest uname -a
+        docker --version
         docker ps -a
         docker images
      else 
