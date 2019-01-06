@@ -28,6 +28,7 @@ if (( $(bc <<< "$KERNEL >= 4.14") == 1 )); then
         docker ps -a
         docker images
         cat /sys/power/axp_pmu/battery/capacity
+        echo "HOST="`cat /etc/hostname` >> /etc/environment
      else 
         echo "Valid kernel $KERNEL on invalid architecture $MACHINE"
      fi
