@@ -27,6 +27,7 @@ if (( $(bc <<< "$KERNEL >= 4.14") == 1 )); then
         docker --version
         docker ps -a
         docker images
+        cat /sys/power/axp_pmu/battery/capacity
      else 
         echo "Valid kernel $KERNEL on invalid architecture $MACHINE"
      fi
