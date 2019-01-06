@@ -12,6 +12,7 @@ if (( $(bc <<< "$KERNEL >= 4.14") == 1 )); then
         echo "Found valid kernel and architecture"
         # Add repro for docker  
         curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+        echo "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
         # Reload all
         apt-get update
         apt-get autoremove
