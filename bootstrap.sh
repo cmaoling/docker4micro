@@ -7,7 +7,7 @@
 MACHINE=$(uname -m)
 KERNEL=$(uname -r | cut -d. -f1-2)
 echo "Kernel=$KERNEL Machine=$MACHINE"
-if (( $(bc <<< "$KERNEL >= 3.8") == 1 )); then
+if (( $(bc <<< "$KERNEL >= 4.14") == 1 )); then
     if [[ $MACHINE == "armv7"* ]]; then
         echo "Found valid kernel and architecture"
         # Add repro for docker  
