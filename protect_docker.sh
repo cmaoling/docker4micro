@@ -20,3 +20,5 @@ export DOCKER_HOST=tcp://$HOST:2376 DOCKER_TLS_VERIFY=1
 #persistent with
 echo "DOCKER_HOST=tcp://"`cat /etc/hostname`":2376"
 echo "DOCKER_TLS_VERIFY=1" >> /etc/environment
+
+#https://portainer.readthedocs.io/en/stable/deployment.html
